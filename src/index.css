@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Public Sans', sans-serif;
+  --font-serif: 'Fraunces', serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --color-paper: #fffbf0;
+  --color-paper-line: #f0dfb8;
+  --color-card: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #6b6b6b;
+
+  --color-yellow: #f5d93a;
+  --color-yellow-dark: #c9a800;
+  --color-yellow-pale: #fdf8d0;
+
+  --color-pink: #e8467c;
+  --color-pink-dark: #c2185b;
+  --color-pink-pale: #fdeaf2;
+  --color-pink-mid: #f4a7c3;
+
+  --color-cream: #f7f0dc;
+  --color-blue-soft: #a8c4e0;
+  --color-green-soft: #a8c4a0;
+
+  --shadow-card:
+    0 1px 2px rgba(26, 26, 26, 0.06), 0 8px 20px rgba(26, 26, 26, 0.08);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-cream);
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 4px;
+  background: var(--color-paper-line);
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--color-pink);
+  border: 3px solid var(--color-card);
+  cursor: pointer;
+}
+
+/* hide scrollbars inside the phone content area, same as the mockup */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
