@@ -58,7 +58,7 @@ export function SignIn({ onSubmit }: SignInProps) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@school.edu"
+            placeholder="you@email.com"
             className="w-full rounded-xl border-[1.5px] border-paper-line bg-card px-3.5 py-2.5 text-[13px] text-ink outline-none focus:border-pink-dark"
           />
         </label>
