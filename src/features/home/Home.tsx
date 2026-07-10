@@ -1,5 +1,6 @@
 import { useNavigation } from '../../app/NavigationContext';
 import { Card, Tear } from '../../components/ui';
+import { Mascot } from '../../components/Mascot';
 
 interface FeatureCardProps {
   iconBg: string;
@@ -36,11 +37,14 @@ export function Home() {
     <div>
       <div className="-mx-4.5 bg-yellow px-4.5 pt-2 pb-5">
         <div className="mb-2 font-mono text-[10.5px] tracking-wider text-ink-soft uppercase">Stub No. 000482</div>
-        <h1 className="mb-2.5 font-serif text-[34px] leading-[1.04] font-bold tracking-[-0.01em] text-ink">
-          Your first paycheck,
-          <br />
-          <span className="text-pink-dark">decoded.</span>
-        </h1>
+        <div className="mb-2.5 flex items-start justify-between gap-3">
+          <h1 className="font-serif text-[34px] leading-[1.04] font-bold tracking-[-0.01em] text-ink">
+            Your first paycheck,
+            <br />
+            <span className="text-pink-dark">decoded.</span>
+          </h1>
+          <Mascot size={84} className="shrink-0" />
+        </div>
         <p className="mb-5 text-[14px] leading-[1.55] text-ink-soft">
           Upload the offer or pay stub nobody explained to you. We'll translate the fine print and show what it's
           worth in 10 years.
