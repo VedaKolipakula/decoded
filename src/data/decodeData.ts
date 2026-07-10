@@ -6,8 +6,8 @@ export interface CurrentUser {
 }
 
 export const currentUser: CurrentUser = {
-  name: 'Veda Kolipakula',
-  avatarInitials: 'VK',
+  name: 'Taylor Swift',
+  avatarInitials: 'TS',
   occupation: 'Product Marketing Coordinator, Bright Path',
   memberSince: 'July 2026',
 };
@@ -45,7 +45,7 @@ export interface OfferLetter {
 
 export const offerLetter: OfferLetter = {
   company: 'Bright Path',
-  recipientName: 'Veda Kolipakula',
+  recipientName: 'Taylor Swift',
   position: 'Product Marketing Coordinator',
   startDate: 'August 3, 2026',
 
@@ -85,7 +85,7 @@ export interface PayStub {
 }
 
 export const payStub: PayStub = {
-  employeeName: 'Veda Kolipakula',
+  employeeName: 'Taylor Swift',
   periodsPerYear: 26,
   grossPay: 2231,
   federalTaxWithheld: 268,

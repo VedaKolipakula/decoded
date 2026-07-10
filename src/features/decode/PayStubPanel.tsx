@@ -64,7 +64,7 @@ export function PayStubPanel() {
     <div>
       <DocumentPicker
         docLabel="pay stub"
-        sampleTitle="Veda's first paycheck"
+        sampleTitle="Taylor's first paycheck"
         sampleSub={`${offerLetter.company} · $${s.grossPay.toLocaleString()}/check · biweekly`}
         samplePlaceholderFileName="sample-pay-stub.pdf"
         buttonLabel="Decode this stub →"
