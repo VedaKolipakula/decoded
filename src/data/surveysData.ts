@@ -9,7 +9,7 @@ export interface SurveyQuestion {
 
 export const financialSurveyQuestions: SurveyQuestion[] = [
   {
-    step: '1 of 7',
+    step: '1 of 10',
     q: 'Which financial goals are you actively working toward?',
     type: 'multi',
     opts: [
@@ -22,13 +22,31 @@ export const financialSurveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    step: '2 of 7',
+    step: '2 of 10',
+    q: "What's your approximate monthly rent or housing cost?",
+    type: 'single',
+    opts: ['Under $800', '$800 – $1,200', '$1,200 – $1,800', '$1,800+'],
+  },
+  {
+    step: '3 of 10',
+    q: 'Do you have any existing debt?',
+    type: 'single',
+    opts: ['No debt right now', 'Credit card debt', 'Student loans', 'Both'],
+  },
+  {
+    step: '4 of 10',
+    q: 'How much do you already have in savings?',
+    type: 'single',
+    opts: ['$0 — starting from scratch', 'Under $1,000', '$1,000 – $5,000', '$5,000+'],
+  },
+  {
+    step: '5 of 10',
     q: 'About how much of your monthly income is usually left after essential expenses?',
     type: 'single',
     opts: ['Less than 10%', '10% – 20%', '20% – 35%', 'More than 35%', "I'm not sure yet"],
   },
   {
-    step: '3 of 7',
+    step: '6 of 10',
     q: 'How would you describe your attitude toward investment risk?',
     type: 'single',
     opts: [
@@ -39,13 +57,13 @@ export const financialSurveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    step: '4 of 7',
+    step: '7 of 10',
     q: 'Do you currently invest in any of the following?',
     type: 'multi',
     opts: ['Stocks or ETFs', 'Index funds', 'Crypto', '401k / retirement account', "I don't invest yet"],
   },
   {
-    step: '5 of 7',
+    step: '8 of 10',
     q: 'How do you currently manage day-to-day spending?',
     type: 'single',
     opts: [
@@ -56,7 +74,7 @@ export const financialSurveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    step: '6 of 7',
+    step: '9 of 10',
     q: "What's your biggest money stress right now?",
     type: 'single',
     opts: [
@@ -68,14 +86,22 @@ export const financialSurveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    step: '7 of 7',
+    step: '10 of 10',
     q: 'What percent of each paycheck could you realistically set aside?',
     type: 'single',
     opts: ['0–3%', '4–6%', '7–10%', '10%+'],
   },
 ];
 
-/** Index into `financialSurveyQuestions` of the contribution-% question above — this is the
+/** Index of the financial-goals question above — the budgeting plan reads selected goals from here. */
+export const goalsQuestionIndex = 0;
+/** Index of the housing-cost question above. */
+export const housingQuestionIndex = 1;
+/** Index of the existing-debt question above. */
+export const debtQuestionIndex = 2;
+/** Index of the existing-savings question above. */
+export const savingsQuestionIndex = 3;
+/** Index into `financialSurveyQuestions` of the contribution-% question — this is the
  *  one answer Decode's match-gap calculation needs from the survey. */
 export const contributionQuestionIndex = financialSurveyQuestions.length - 1;
 
@@ -89,6 +115,20 @@ export const bucketMidpoint: Record<string, number> = {
 
 /** Fallback contribution % Decode assumes when the Financial survey hasn't been completed yet. */
 export const defaultUserContributionPct = 5;
+
+/** Dollar midpoint for each housing-cost bracket, used by the Pay Stub budgeting plan. */
+export const housingMidpoint: Record<string, number> = {
+  'Under $800': 650,
+  '$800 – $1,200': 1000,
+  '$1,200 – $1,800': 1500,
+  '$1,800+': 2000,
+};
+
+/** Fallback housing/debt assumptions the budgeting plan uses when the Financial survey hasn't
+ *  been completed yet — mid-range rent, no debt, and (since goals default to none selected)
+ *  no emergency-fund or goal-savings lines. */
+export const defaultHousingLabel = '$800 – $1,200';
+export const defaultDebtLabel = 'No debt right now';
 
 export const mentorshipSurveyQuestions: SurveyQuestion[] = [
   {

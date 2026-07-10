@@ -1,28 +1,40 @@
-import { useState } from 'react';
 import { offerLetter, payStub } from '../../data/decodeData';
+import { useSurvey } from '../../app/SurveyContext';
 import {
-  annualContributionWithMatch,
+  debtQuestionIndex,
+  defaultDebtLabel,
+  defaultHousingLabel,
+  financialSurveyQuestions,
+  goalsQuestionIndex,
+  housingQuestionIndex,
+  savingsQuestionIndex,
+} from '../../data/surveysData';
+import {
+  computeBudgetPlan,
   computeMatchGap,
   fmtD,
   payStubAnnualSalary,
   payStubEffectiveTaxRate,
   payStubK401Contribution,
+  payStubMonthlyNet,
   payStubNetPay,
-  payStubPillOptions,
 } from '../../lib/calculations';
-import { CalloutCard, Card, Eyebrow, LedgerRow, LedgerTotalRow, Tear } from '../../components/ui';
+import { BigTotalCard, CalloutCard, Card, Eyebrow, LedgerRow, LedgerTotalRow, RowVal, Tear } from '../../components/ui';
 import { DocumentPicker } from './DocumentPicker';
 import { MatchGapHero } from './MatchGapHero';
-import { ProjectionPanel } from './ProjectionPanel';
 import { useDocumentDecode } from './useDocumentDecode';
 
-interface PayStubPanelProps {
-  userContributionPct: number;
-}
+const BUDGET_BADGE_COLORS: Record<string, string> = {
+  'Rent / housing': '#A8C4E0',
+  'Debt paydown': '#D9553A',
+  'Emergency fund': '#8B6F2E',
+};
+const GOAL_SAVINGS_BADGE_COLOR = '#C2185B';
+const FLEXIBLE_BADGE_COLOR = '#1A1A1A';
 
-export function PayStubPanel({ userContributionPct }: PayStubPanelProps) {
+export function PayStubPanel() {
   const picker = useDocumentDecode();
-  const [projectionPct, setProjectionPct] = useState(userContributionPct);
+  const { financialAnswers } = useSurvey();
 
   const s = payStub;
   const maxMatchPct = offerLetter.retirement.maxMatchPct;
@@ -32,8 +44,21 @@ export function PayStubPanel({ userContributionPct }: PayStubPanelProps) {
   const net = payStubNetPay(s);
   const effTax = payStubEffectiveTaxRate(s);
   const k401Dollars = payStubK401Contribution(s);
-  const pillOptions = payStubPillOptions(userContributionPct);
-  const annualContribution = annualContributionWithMatch(annualSalary, projectionPct);
+
+  const usingDefaultBudget = financialAnswers === null;
+  const goalLabels = financialAnswers
+    ? (financialAnswers[goalsQuestionIndex] ?? []).map((i) => financialSurveyQuestions[goalsQuestionIndex].opts[i])
+    : [];
+  const singleLabel = (questionIndex: number): string | undefined => {
+    const optionIndex = financialAnswers?.[questionIndex]?.[0];
+    return optionIndex !== undefined ? financialSurveyQuestions[questionIndex].opts[optionIndex] : undefined;
+  };
+  const housingLabel = singleLabel(housingQuestionIndex) ?? defaultHousingLabel;
+  const debtLabel = singleLabel(debtQuestionIndex) ?? defaultDebtLabel;
+  const savingsLabel = singleLabel(savingsQuestionIndex);
+
+  const monthlyNet = payStubMonthlyNet(s);
+  const plan = computeBudgetPlan(monthlyNet, goalLabels, housingLabel, debtLabel, savingsLabel);
 
   return (
     <div>
@@ -112,20 +137,47 @@ export function PayStubPanel({ userContributionPct }: PayStubPanelProps) {
           </CalloutCard>
 
           <Tear />
-          <Eyebrow>The 10-year "what if"</Eyebrow>
-          <ProjectionPanel
-            title="Tap a contribution rate"
-            pillOptions={pillOptions}
-            selectedPct={projectionPct}
-            onSelect={setProjectionPct}
-            annualContribution={annualContribution}
-            calloutText={
-              <>
-                At {projectionPct}% you're on track for an est. <strong>{fmtD(annualContribution)}/year</strong>{' '}
-                including match.
-              </>
-            }
+          <Eyebrow>Your budgeting plan</Eyebrow>
+          <BigTotalCard
+            label="Monthly net pay"
+            value={fmtD(plan.monthlyNet)}
+            sub="This paycheck, scaled to a month"
           />
+
+          <div className="mt-4">
+            <Eyebrow>Where it could go</Eyebrow>
+          </div>
+          <Card>
+            {plan.lines.map((line, i) => (
+              <RowVal
+                key={`${line.label}-${i}`}
+                badgeColor={BUDGET_BADGE_COLORS[line.label] ?? GOAL_SAVINGS_BADGE_COLOR}
+                badgeText={line.label[0]}
+                title={line.label}
+                sub={line.sub}
+                value={`− ${fmtD(line.amount)}`}
+              />
+            ))}
+            <RowVal
+              badgeColor={FLEXIBLE_BADGE_COLOR}
+              badgeText="F"
+              title="Flexible spending"
+              sub="What's left — food, transportation, and everything else"
+              value={fmtD(plan.flexible)}
+            />
+          </Card>
+
+          {usingDefaultBudget && (
+            <div className="mb-3 -mt-2 text-[11px] leading-[1.5] text-ink-soft italic">
+              Using estimated defaults (mid-range rent, no debt, no specific savings goals) — complete your
+              Financial survey for a personalized plan.
+            </div>
+          )}
+
+          <CalloutCard variant="yellow">
+            This is an illustrative starting point based on common budgeting guidelines, not personalized
+            financial advice.
+          </CalloutCard>
         </div>
       )}
     </div>

@@ -44,7 +44,7 @@ export function Decode() {
       {docType === 'offer' ? (
         <OfferLetterPanel userContributionPct={userContributionPct} usingDefaultPct={usingDefaultPct} />
       ) : (
-        <PayStubPanel userContributionPct={userContributionPct} />
+        <PayStubPanel />
       )}
     </div>
   );

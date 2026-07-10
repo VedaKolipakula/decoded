@@ -181,7 +181,7 @@ export function Profile({ showEnterCta = false, onEnter }: ProfileProps = {}) {
         <TodoSurveyCard
           icon="🪙"
           title="Financial survey"
-          sub="Goals, risk tolerance, spending habits — 7 questions"
+          sub="Goals, housing, debt, spending habits — 10 questions"
           onClick={() => setView('financial')}
         />
       )}

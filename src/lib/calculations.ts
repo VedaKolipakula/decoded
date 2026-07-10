@@ -1,5 +1,6 @@
 import type { OfferLetter, PayStub } from '../data/decodeData';
 import type { MeridianOffer } from '../data/compareData';
+import { housingMidpoint } from '../data/surveysData';
 
 /** 100% match on the first 3%, 50% match on the next 2% — caps at 4% employer match. */
 export function employerMatchPct(employeeContributionPct: number): number {
@@ -116,14 +117,82 @@ export function payStubEffectiveTaxRate(stub: PayStub): number {
   return ((stub.federalTaxWithheld + stub.stateTaxWithheld + stub.ficaWithheld) / stub.grossPay) * 100;
 }
 
+/** Net pay per check, scaled to a monthly figure — the starting point for the budgeting plan. */
+export function payStubMonthlyNet(stub: PayStub): number {
+  return (payStubNetPay(stub) * stub.periodsPerYear) / 12;
+}
+
+const CREDIT_CARD_DEBT_RATE = 0.15;
+const STUDENT_LOAN_DEBT_RATE = 0.08;
+const EMERGENCY_FUND_RATE = 0.1;
+const GOAL_SAVINGS_RATE = 0.15;
+
+/** The Financial survey's goals that map to a savings target rather than a fixed cost. */
+export const GOAL_SAVINGS_LABELS = ['Buying a home', 'Funding further education', 'Saving for retirement', 'Growing investments'];
+
+const LOW_SAVINGS_LABELS = ['$0 — starting from scratch', 'Under $1,000'];
+
+export interface BudgetLineItem {
+  label: string;
+  sub: string;
+  amount: number;
+}
+
+export interface BudgetPlan {
+  monthlyNet: number;
+  lines: BudgetLineItem[];
+  flexible: number;
+}
+
+/**
+ * Housing → debt paydown → emergency fund → goal-based savings → whatever's left over.
+ * Each step allocates a slice of `monthlyNet`; the remainder is shown as flexible spending
+ * (food, transportation, discretionary) — this app shows the math, not how to spend what's left.
+ */
+export function computeBudgetPlan(
+  monthlyNet: number,
+  goalLabels: string[],
+  housingLabel: string,
+  debtLabel: string,
+  savingsLabel: string | undefined,
+): BudgetPlan {
+  const lines: BudgetLineItem[] = [
+    { label: 'Rent / housing', sub: housingLabel, amount: housingMidpoint[housingLabel] ?? 0 },
+  ];
+
+  if (debtLabel === 'Credit card debt' || debtLabel === 'Both') {
+    lines.push({
+      label: 'Debt paydown',
+      sub: 'Credit card debt — highest rate, paid down first',
+      amount: monthlyNet * CREDIT_CARD_DEBT_RATE,
+    });
+  } else if (debtLabel === 'Student loans') {
+    lines.push({ label: 'Debt paydown', sub: 'Student loans', amount: monthlyNet * STUDENT_LOAN_DEBT_RATE });
+  }
+
+  const wantsEmergencyFund = goalLabels.includes('Building an emergency fund');
+  const lowSavings = savingsLabel !== undefined && LOW_SAVINGS_LABELS.includes(savingsLabel);
+  if (wantsEmergencyFund && lowSavings) {
+    lines.push({ label: 'Emergency fund', sub: 'Building your cushion', amount: monthlyNet * EMERGENCY_FUND_RATE });
+  }
+
+  const goalSavingsTargets = goalLabels.filter((goal) => GOAL_SAVINGS_LABELS.includes(goal));
+  if (goalSavingsTargets.length > 0) {
+    const perGoal = (monthlyNet * GOAL_SAVINGS_RATE) / goalSavingsTargets.length;
+    for (const goal of goalSavingsTargets) {
+      lines.push({ label: goal, sub: 'Goal-based savings', amount: perGoal });
+    }
+  }
+
+  const allocated = lines.reduce((sum, line) => sum + line.amount, 0);
+  const flexible = Math.max(0, monthlyNet - allocated);
+
+  return { monthlyNet, lines, flexible };
+}
+
 /** Contribution-rate pill options for the offer-letter projection, deduped and sorted. */
 export function offerPillOptions(userPct: number, maxMatchPct: number): number[] {
   return Array.from(new Set([0, 3, userPct, maxMatchPct, 8, 12])).sort((a, b) => a - b);
-}
-
-/** Contribution-rate pill options for the pay-stub projection, deduped and sorted. */
-export function payStubPillOptions(userPct: number): number[] {
-  return Array.from(new Set([0, 3, userPct, 5, 8, 12])).sort((a, b) => a - b);
 }
 
 /** Total annual $ going into the 401k (employee + employer match) at a given contribution %. */
