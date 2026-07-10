@@ -26,6 +26,19 @@
 
   --shadow-card:
     0 1px 2px rgba(26, 26, 26, 0.06), 0 8px 20px rgba(26, 26, 26, 0.08);
+
+  /* gentle bob for the mascot while Decode is "reading" a document */
+  --animate-mascot-bob: mascot-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes mascot-bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+  }
 }
 
 html,

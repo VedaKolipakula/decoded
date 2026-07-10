@@ -1,3 +1,5 @@
+import { Mascot } from '../../components/Mascot';
+
 interface MatchGapHeroProps {
   hasGap: boolean;
   label: string;
@@ -10,8 +12,9 @@ interface MatchGapHeroProps {
 export function MatchGapHero({ hasGap, label, value, sub, note }: MatchGapHeroProps) {
   return (
     <div
-      className={`mb-1 rounded-[18px] px-[17px] pt-4.5 pb-4 text-white ${hasGap ? 'bg-pink-dark' : 'bg-[#3B7A57]'}`}
+      className={`relative mb-1 rounded-[18px] px-[17px] pt-4.5 pb-4 text-white ${hasGap ? 'bg-pink-dark' : 'bg-[#3B7A57]'}`}
     >
+      {!hasGap && <Mascot size={42} className="absolute top-3 right-3.5 drop-shadow-sm" />}
       <div className="font-mono text-[10px] font-semibold tracking-wide text-white/85 uppercase">{label}</div>
       <div className="mt-1.5 font-serif text-[30px] font-bold">{value}</div>
       <div className="mt-1.5 text-[12px] leading-[1.5] text-white/90">{sub}</div>

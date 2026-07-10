@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Mascot } from '../../components/Mascot';
 
 interface DocumentPickerProps {
   docLabel: string;
@@ -80,11 +81,9 @@ export function DocumentPicker({
       />
 
       {detecting ? (
-        <div className="flex items-center gap-2.5 py-3.5 font-mono text-[12px] text-pink-dark">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink" />
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink [animation-delay:150ms]" />
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink [animation-delay:300ms]" />
-          <span>Reading the fine print…</span>
+        <div className="flex flex-col items-center gap-2 py-5">
+          <Mascot size={44} className="animate-mascot-bob" />
+          <span className="font-mono text-[12px] text-pink-dark">Reading the fine print…</span>
         </div>
       ) : (
         <>
