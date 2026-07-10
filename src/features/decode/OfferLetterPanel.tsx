@@ -43,14 +43,14 @@ export function OfferLetterPanel({ userContributionPct, usingDefaultPct }: Offer
     <div>
       <DocumentPicker
         docLabel="offer letter"
-        sampleTag="Sample offer letter"
         sampleTitle={`${o.company} — ${o.position}`}
         sampleSub={`$${o.baseSalary.toLocaleString()} base · Seed-stage startup`}
+        samplePlaceholderFileName="sample-offer-letter.pdf"
         buttonLabel="Decode this offer →"
-        sampleSelected={picker.sampleSelected}
         fileName={picker.fileName}
-        decoding={picker.decoding}
-        canDecode={picker.canDecode}
+        sampleSelected={picker.sampleSelected}
+        detecting={picker.detecting}
+        detected={picker.detected}
         onSelectSample={picker.selectSample}
         onSelectFile={picker.selectFile}
         onClearFile={picker.clearFile}

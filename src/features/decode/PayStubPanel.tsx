@@ -39,14 +39,14 @@ export function PayStubPanel({ userContributionPct }: PayStubPanelProps) {
     <div>
       <DocumentPicker
         docLabel="pay stub"
-        sampleTag="Sample pay stub"
         sampleTitle="Veda's first paycheck"
         sampleSub={`${offerLetter.company} · $${s.grossPay.toLocaleString()}/check · biweekly`}
+        samplePlaceholderFileName="sample-pay-stub.pdf"
         buttonLabel="Decode this stub →"
-        sampleSelected={picker.sampleSelected}
         fileName={picker.fileName}
-        decoding={picker.decoding}
-        canDecode={picker.canDecode}
+        sampleSelected={picker.sampleSelected}
+        detecting={picker.detecting}
+        detected={picker.detected}
         onSelectSample={picker.selectSample}
         onSelectFile={picker.selectFile}
         onClearFile={picker.clearFile}
