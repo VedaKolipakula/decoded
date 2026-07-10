@@ -127,7 +127,7 @@ export function ChapterQuizContent({ chapterIdx, quiz, onPass, onClose }: Chapte
               onClick={() => answer(i)}
               className={`flex items-center gap-2.5 rounded-xl border-[1.5px] px-3.5 py-2.5 text-left text-[13px] transition-colors ${
                 state === 'correct'
-                  ? 'border-pink bg-pink-pale text-pink-dark'
+                  ? 'border-[#3B7A57] bg-green-soft text-ink'
                   : state === 'wrong'
                     ? 'border-[#D9553A] bg-[#fdf2f0] text-[#D9553A]'
                     : 'border-paper-line bg-paper text-ink'
@@ -144,7 +144,7 @@ export function ChapterQuizContent({ chapterIdx, quiz, onPass, onClose }: Chapte
         <div className="mt-3">
           <div
             className={`rounded-r-xl border-l-[3px] px-3 py-2.5 text-[12.5px] leading-[1.5] text-ink ${
-              chosen === question.correct ? 'border-pink bg-pink-pale' : 'border-[#D9553A] bg-[#fdf2f0]'
+              chosen === question.correct ? 'border-[#3B7A57] bg-green-soft' : 'border-[#D9553A] bg-[#fdf2f0]'
             }`}
           >
             <strong>{chosen === question.correct ? '✓ Correct!' : '✗ Not quite.'}</strong> {question.explain}

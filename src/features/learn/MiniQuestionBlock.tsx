@@ -45,7 +45,7 @@ export function MiniQuestionBlock({ mq, done, onCorrect }: MiniQuestionBlockProp
                 onClick={() => pick(i)}
                 className={`flex items-center gap-2.5 rounded-[10px] border-[1.5px] px-3 py-2.5 text-left text-[12.5px] transition-colors ${
                   state === 'correct'
-                    ? 'border-pink bg-pink-pale text-pink-dark'
+                    ? 'border-[#3B7A57] bg-green-soft text-ink'
                     : state === 'wrong'
                       ? 'border-[#D9553A] bg-[#fdf2f0] text-[#D9553A]'
                       : 'border-paper-line bg-white text-ink'
@@ -73,7 +73,7 @@ export function MiniQuestionBlock({ mq, done, onCorrect }: MiniQuestionBlockProp
                 onClick={() => pick(val)}
                 className={`flex-1 rounded-[10px] border-[1.5px] py-2.5 text-center font-mono text-[13px] font-bold transition-colors ${
                   state === 'correct'
-                    ? 'border-pink bg-pink-pale text-pink-dark'
+                    ? 'border-[#3B7A57] bg-green-soft text-ink'
                     : state === 'wrong'
                       ? 'border-[#D9553A] bg-[#fdf2f0] text-[#D9553A]'
                       : 'border-paper-line bg-white text-ink'
@@ -89,7 +89,7 @@ export function MiniQuestionBlock({ mq, done, onCorrect }: MiniQuestionBlockProp
       {revealed && (
         <div
           className={`mt-1 rounded-b-[10px] px-3 py-2.5 text-[12px] leading-[1.5] ${
-            isCorrect ? 'border-l-[3px] border-pink bg-pink-pale text-pink-dark' : 'border-l-[3px] border-[#D9553A] bg-[#fdf2f0] text-[#b33]'
+            isCorrect ? 'border-l-[3px] border-[#3B7A57] bg-green-soft text-ink' : 'border-l-[3px] border-[#D9553A] bg-[#fdf2f0] text-[#b33]'
           }`}
         >
           {isCorrect ? '✓ ' : '✗ '}
